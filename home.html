@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Create Page</title>
+
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+</head>
+
+<style>
+
+    body {
+    font-family: 微軟正黑體;
+    //background-color: #FEEABA;
+    }
+
+    h1{   font-family: 微軟正黑體;   }
+    .release{
+     padding: 10px;
+    }
+    .article{
+
+     width: 600px;
+     height: auto;
+     background-color: #BDEBF2;
+     margin: 10px; 
+     padding: 5px;
+     padding-bottom: 20px;
+
+    }
+
+</style>
+
+<body>
+
+<div class="release">
+    <label for="content">文章內容　</label><button type="button" id="create">發表</button><br>
+    <textarea cols="45" rows="5" id="content"></textarea>
+  
+</div>
+
+<div class="show">
+    <div class="article">
+    作者：系統<br>
+    歡迎光臨
+    </div>
+
+
+</div>
+
+</body>
+
+
+<script>
+$(function(){
+
+    $('#create').click(function(){
+
+    var str = $('#content').val();
+    str = str.replace(/\n/g,"<br />");
+
+    var inset  ='<div style="width: 600px; height: auto; background-color: #BDEBF2; margin: 10px; padding: 5px; padding-bottom: 20px; display:none;">作者：系統<br>'+str+'</div>';
+    
+    $(inset).prependTo('.show').fadeIn('slow');
+    $('#content').val("");
+    });
+
+
+})
+</script>
+
+
+</html>
