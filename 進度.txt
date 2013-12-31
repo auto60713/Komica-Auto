@@ -1,0 +1,3 @@
+資料庫 "komica"
+資料表
+-paper{id.content.time}
