@@ -1,18 +1,25 @@
-var app = require('express')()
-  , server = require('http').createServer(app)
-  , io = require('socket.io').listen(server)
-  , mysql = require('mysql');
+var express = require('express'),
+    app = express(),
+    server = require('http').createServer(app),
+    io = require('socket.io').listen(server),
+    path = require('path'),
+    mysql = require('mysql');
+    
 
 
-server.listen(200);
- console.log('伺服器開啟 localhost:200');
+app.use(express.static(path.join(__dirname, '/script')));
+app.use(express.static(path.join(__dirname, '/views')));
 
-//==============================================================
+
+
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/home.html');
 });
 
 
+//==============================================================
+server.listen(200);
+ console.log('伺服器開啟 localhost:200');
 
 //==============================================================
 var connection = mysql.createConnection({
