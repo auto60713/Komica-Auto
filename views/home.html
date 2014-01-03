@@ -6,7 +6,7 @@
 
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <script src="script/home.js"></script>
+
 </head>
 <style>
 
@@ -32,7 +32,7 @@
 
     }
 
-    .mzg{
+    #mzg{
     width: 600px; 
     height: auto; 
     background-color: #70BAF1; 
@@ -52,6 +52,7 @@ socket = io.connect('http://localhost:200');
     socket.on('connect', function() {
 
         socket.emit('loadpaper'); 
+        socket.emit('loadmzg'); 
     });
 
 
@@ -61,12 +62,20 @@ socket = io.connect('http://localhost:200');
         var str = content;
             str = str.replace(/\n/g,"<br />");
 
-        var inset  ='<div style ="margin:10px; display:none;"><div class="content"><b style="color:#2B8674; line-height:20pt;">作者：匿名　id：'+id+'　時間：'+time+'</b><br>'+str+'</div><div class="mzg"><b style="color:#2B8674">推文</b><input type="text" id="text'+id+'" size="50"/><button type="button" class="addmzg" onclick="mzg('+id+')">推</button></div></div>';
+        var inset  ='<div style ="margin:10px; display:none;"><div class="content"><b style="color:#2B8674; line-height:20pt;">作者：匿名　id：'+id+'　時間：'+time+'</b><br>'+str+'</div><div id="mzg" class="mzg'+id+'"><b style="color:#2B8674">推文</b><input type="text" id="text'+id+'" size="50"/><button type="button" class="addmzg" onclick="mzg('+id+')">推</button></div></div>';
     
         $(inset).prependTo('.show').fadeIn('slow');
    
     });
 
+//秀出留言
+    socket.on('showmzg',function(who, content, time) {
+
+        var inset  ='<a style ="display:none;">'+time+' ( ・ω・)< '+content+'</a><br>';
+    
+        $(inset).prependTo('.mzg' + who).fadeIn('slow');
+   
+    });
 
 
 })
@@ -76,7 +85,8 @@ socket = io.connect('http://localhost:200');
 <body>
 
 <div class="release">
-    <label for="content">文章內容　</label><button type="button" id="add">發表</button><br>
+    <label for="content">文章內容　</label><button type="button" id="add">發表</button>
+    <button type="button" id="add">更新留言</button><br>
     <textarea cols="45" rows="5" id="content"></textarea>
 </div>
 
@@ -89,7 +99,7 @@ socket = io.connect('http://localhost:200');
 歡迎光臨<br>
 歡迎光臨<br>
 </div>
-<div class="mzg">
+<div id="mzg" class="mzg110">
 <b style="color:#2B8674">推文</b><input type="text" id="text110" size="50"/>
 <button type="button" class="addmzg" onclick="mzg(110)">推</button>
 </div>
@@ -97,19 +107,8 @@ socket = io.connect('http://localhost:200');
 
 
 </div>
-
-
+ 
 </body>
 
-
-<!-- client端 -->
-<script>
-
-
-//Jquery 選擇器選不到prepend的物件 所以用傳統JS當跳板
-
-
-</script>
-
-
+<script src="home.js"></script>
 </html>
