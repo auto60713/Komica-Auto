@@ -51,6 +51,20 @@ io.sockets.on('connection', function (socket) {
 
       });
 
+      //進入網頁後 先從資料庫把舊留言提出來
+      socket.on('loadmzg',function() {      
+
+            connection.query('SELECT * FROM mzg ORDER BY id ASC', function(err, results){
+
+                  for (var i=0; i<results.length; i++){
+
+                  socket.emit('showmzg', results[i].paperid, results[i].content, results[i].time);
+                  }
+
+            });   
+
+      });
+
 
       //當有人發文時
       socket.on('newpaper', function(content) {
@@ -64,7 +78,17 @@ io.sockets.on('connection', function (socket) {
             socket.emit('showpaper', "-", content, "-");
       });
 
+      //當有人發留言時
+      socket.on('newmzg', function(who,content) {
+      console.log('asdasdasd！');
+            connection.query('INSERT INTO mzg SET paperid=?, content=?, time=now()',[who,content],
 
+                  function(error){
+                  if(error){   console.log('寫入資料失敗！');   }
+            });
+
+            socket.emit('showmzg', who, content, "-");
+      });
 
 
 });

@@ -12,9 +12,9 @@ $('#add').click(function(){
 
 function mzg(who){
 
-    var data = $('#text'+who).val();
-    alert(data);
-
+    var content = $('#text'+who).val();
+    socket.emit('newmzg', who, content);
+    $('#text'+who).val("")
 }
 
 
