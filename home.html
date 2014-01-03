@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>綜合</title>
+
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+</head>
+<style>
+
+    body {
+    font-family: 微軟正黑體;
+    }
+
+    h1{
+    font-family: 微軟正黑體;
+    }
+
+    .release{
+    padding: 10px;
+    }
+
+    .content{
+  
+    width: 600px; 
+    height: auto; 
+    background-color: #BDEBF2; 
+    padding: 5px; 
+    padding-bottom: 60px;
+
+    }
+
+    #mzg{
+    width: 600px; 
+    height: auto; 
+    background-color: #70BAF1; 
+    padding: 5px; 
+    }
+
+</style>
+
+<script src="http://localhost:200/socket.io/socket.io.js"></script>
+
+<script>
+$(function(){
+
+socket = io.connect('http://localhost:200');
+
+//載入舊文章
+    socket.on('connect', function() {
+
+        socket.emit('loadpaper'); 
+        socket.emit('loadmzg'); 
+    });
+
+
+//秀出文章
+    socket.on('showpaper',function(id, content, time) {
+
+        var str = content;
+            str = str.replace(/\n/g,"<br />");
+
+        var inset  ='<div style ="margin:10px; display:none;"><div class="content"><b style="color:#2B8674; line-height:20pt;">作者：匿名　id：'+id+'　時間：'+time+'</b><br>'+str+'</div><div id="mzg" class="mzg'+id+'"><b style="color:#2B8674">推文</b><input type="text" id="text'+id+'" size="50"/><button type="button" class="addmzg" onclick="mzg('+id+')">推</button></div></div>';
+    
+        $(inset).prependTo('.show').fadeIn('slow');
+   
+    });
+
+//秀出留言
+    socket.on('showmzg',function(who, content, time) {
+
+        var inset  ='<a style ="display:none;">'+time+' ( ・ω・)< '+content+'</a><br>';
+    
+        $(inset).prependTo('.mzg' + who).fadeIn('slow');
+   
+    });
+
+
+})
+</script>
+
+
+<body>
+
+<div class="release">
+    <label for="content">文章內容　</label><button type="button" id="add">發表</button>
+    <button type="button" id="add">更新留言</button><br>
+    <textarea cols="45" rows="5" id="content"></textarea>
+</div>
+
+<div class="show">
+
+
+<div style ="margin:10px;">
+<div class="content">
+<b style="color:#2B8674; line-height:20pt;">作者：匿名　id：110　時間：00</b><br>
+歡迎光臨<br>
+歡迎光臨<br>
+</div>
+<div id="mzg" class="mzg110">
+<b style="color:#2B8674">推文</b><input type="text" id="text110" size="50"/>
+<button type="button" class="addmzg" onclick="mzg(110)">推</button>
+</div>
+</div>
+
+
+</div>
+ 
+</body>
+
+<script src="home.js"></script>
+</html>
