@@ -44,7 +44,6 @@
 <script src="http://localhost:200/socket.io/socket.io.js"></script>
 
 <script>
-$(function(){
 
 socket = io.connect('http://localhost:200');
 
@@ -57,36 +56,36 @@ socket = io.connect('http://localhost:200');
 
 
 //秀出文章
-    socket.on('showpaper',function(id, content, time) {
+    socket.on('showpaper',function(id, content, time, key) {
 
         var str = content;
             str = str.replace(/\n/g,"<br />");
 
-        var inset  ='<div style ="margin:10px; display:none;"><div class="content"><b style="color:#2B8674; line-height:20pt;">作者：匿名　id：'+id+'　時間：'+time+'</b><br>'+str+'</div><div id="mzg" class="mzg'+id+'"><b style="color:#2B8674">推文</b><input type="text" id="text'+id+'" size="50"/><button type="button" class="addmzg" onclick="mzg('+id+')">推</button></div></div>';
+
+        var inset  ='<div style ="margin:10px; display:none;"><div class="content"><b style="color:#2B8674; line-height:20pt;">作者：匿名　id：'+id+'　時間：'+time+'</b><br>'+str+'</div><div id="mzg" class="'+key+'"><b style="color:#2B8674">推文</b><input type="text" id="'+key+'" size="50"/><button type="button" class="addmzg" onclick="mzg(\''+key+'\')">推</button><br></div></div>';
     
         $(inset).prependTo('.show').fadeIn('slow');
    
     });
 
 //秀出留言
-    socket.on('showmzg',function(who, content, time) {
+    socket.on('showmzg',function(key, content, time) {
 
         var inset  ='<a style ="display:none;">'+time+' ( ・ω・)< '+content+'</a><br>';
     
-        $(inset).prependTo('.mzg' + who).fadeIn('slow');
+        $(inset).appendTo('.' + key).fadeIn('slow');
    
     });
 
 
-})
+
 </script>
 
 
 <body>
 
 <div class="release">
-    <label for="content">文章內容　</label><button type="button" id="add">發表</button>
-    <button type="button" id="add">更新留言</button><br>
+    <label for="content">文章內容　</label><button type="button" id="add">發表</button><br>
     <textarea cols="45" rows="5" id="content"></textarea>
 </div>
 
@@ -99,9 +98,9 @@ socket = io.connect('http://localhost:200');
 歡迎光臨<br>
 歡迎光臨<br>
 </div>
-<div id="mzg" class="mzg110">
-<b style="color:#2B8674">推文</b><input type="text" id="text110" size="50"/>
-<button type="button" class="addmzg" onclick="mzg(110)">推</button>
+<div id="mzg" class="a110">
+<b style="color:#2B8674">推文</b><input type="text" id="a110" size="50"/>
+<button type="button" class="addmzg" onclick="mzg(a110)">推</button><br>
 </div>
 </div>
 

@@ -8,13 +8,11 @@ $('#add').click(function(){
 })
 
 
+function mzg(paperkey){
 
-
-function mzg(who){
-
-    var content = $('#text'+who).val();
-    socket.emit('newmzg', who, content);
-    $('#text'+who).val("")
+    var content = $('#'+paperkey).val();
+    socket.emit('newmzg', paperkey, content);
+    $('#'+paperkey).val("")
 }
 
 

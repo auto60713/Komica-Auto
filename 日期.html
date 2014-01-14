@@ -1,0 +1,35 @@
+<html>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+
+
+
+<button type="button" id="add">產生日期</button><br>
+<p id="word"></p>
+
+
+
+<script>
+	
+$('#add').click(function(){
+
+var dt   = new Date();
+var sec  = dt.getSeconds();
+var hr   = dt.getHours();
+var min  = dt.getMinutes();
+var day  = dt.getDate();
+var mon  = dt.getMonth()+1;
+var year = dt.getFullYear();
+
+
+var now = (year+'/'+mon+'/'+day+'_'+hr+':'+min+':'+sec);
+
+
+ $('#word').html(now);
+
+})
+
+</script>
+</html>
