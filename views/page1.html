@@ -1,0 +1,158 @@
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>八卦</title>
+
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+  <link href="basic.css" rel="stylesheet" type="text/css" />
+</head>
+
+
+
+<script src="http://localhost:200/socket.io/socket.io.js"></script>
+
+<script>
+
+socket = io.connect('http://localhost:200');
+
+//載入舊文章
+    socket.on('connect', function() {
+
+        socket.emit('loadpaper'); 
+        socket.emit('loadreply'); 
+    });
+
+
+//秀出文章
+    socket.on('showpaper',function(id, content, time) {
+
+        var str = content;
+            str = str.replace(/\n/g,"<br />");
+
+
+        var inset  ='<div style ="margin:10px; display:none;"><div class="content"><b style="color:#2B8674; line-height:20pt;">作者：匿名　id：'+id+'　時間：'+time+'　</b><a href="reply?id='+id+'">[返信]</a><br>'+str+'</div><div id="paper'+id+'" class="reply"></div></div><hr>';
+    
+        $(inset).prependTo('.show').fadeIn('slow');
+   
+    });
+
+//秀出回副的文章
+   socket.on('showreply',function(paperid, content, time) {
+
+        var str = content;
+            str = str.replace(/\n/g,"<br />");
+
+        var inset  ='<a style ="display:none;"><b style="color:#2B8674">時間：'+time+'</b><br>'+str+'<br><br><br>';
+    
+        $(inset).appendTo('#paper' + paperid).fadeIn('slow');
+   
+    });
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+<style TYPE="text/css">
+
+body,tr,td,th { font-size:12pt }
+a:hover { color:#DD0000; }
+a.del { color:#800000; }
+span { font-size:20pt }
+small { font-size:10pt }
+
+
+h1.title{
+    text-align: center;
+	color:#800000;
+    font-size:28pt;
+}
+
+
+
+
+
+</style>
+
+
+<body bgcolor="#FFFFEE" text="#800000" link="#0000EE" vlink="#0000EE">
+
+<p align=right>
+[<a href="">首頁</a>]
+[<a href="">行動版</a>]
+[<a href="">檔案區</a>]
+[<a href="">管理用</a>]
+</p>
+
+
+<h1 class="title">八卦</h1>
+
+<hr><!-- ================================================================ -->
+
+<center>
+<br>
+
+<table border=0 cellpadding=1 cellspacing=1>
+<tr>
+<td bgcolor = "#EEAA88"><b>標題</b></td>
+<td><input type = "text" name = "title" size = "28">&nbsp;
+<button type="button" id="add">送　出</button></td>
+</tr>
+
+<tr>
+<td bgcolor = "#EEAA88"><b>內　　文</b></td>
+<td><textarea name = "cont" cols="48" rows="4" wrap = "soft" id = "content"></textarea></td>
+</tr>
+
+<tr>
+<td bgcolor = "#EEAA88"><b>附加圖檔</b></td><td><input type=file name=upfile size="35">&nbsp;[<label>
+<input type = "checkbox" name = "textonly" value = "on">無貼圖</label>]</td>
+</tr>
+
+<tr>
+<td colspan=2>
+<br>
+<small>
+<LI>可附加圖檔類型：GIF, JPG, PNG，瀏覽器才能正常附加圖檔。
+<LI>圖片寛 250像素、高 250像素以上時自動縮小尺寸顯示。回文可貼圖。
+<LI>附加圖檔最大上限 1024 KB。在E-mail欄填入sage時，回應不會有推文效果。
+<LI>投稿時請輸入畫像認證後，再按下 [送出] 按鈕提交。
+</small>
+</td>
+</tr>
+</table>
+
+<br>
+</center>
+
+
+<hr><!-- ================================================================ -->
+
+<div class="show">
+
+
+
+
+</div>
+
+<!-- ================================================================ -->
+
+
+
+<center>
+<small><br><br>
+<br>All trademarks and copyrights on this page are owned by their respective owners. 
+<br>Images uploaded are the responsibility of the Poster. Comments are owned by the Poster.
+</small><br><br>
+</center>
+
+</body>
+</html>
