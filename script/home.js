@@ -8,12 +8,4 @@ $('#add').click(function(){
 })
 
 
-function mzg(paperkey){
-
-    var content = $('#'+paperkey).val();
-    socket.emit('newmzg', paperkey, content);
-    $('#'+paperkey).val("")
-}
-
-
 

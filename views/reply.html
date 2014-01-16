@@ -8,7 +8,9 @@
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
     <link href="basic.css" rel="stylesheet" type="text/css" />
+
 </head>
+
 
 
 
@@ -19,26 +21,35 @@
 
 socket = io.connect('http://localhost:200');
 
-//載入舊文章
+
+var url = location.href
+  , cut = url.split("?")
+  , val = cut[1].split("=")
+  , paperid = val[1];
+
+//進入網頁後
     socket.on('connect', function() {
 
-        socket.emit('loadpaper'); 
-        socket.emit('loadreply'); 
+        //要回覆的文章
+        socket.emit('replypaper', paperid); 
+        //該文章的其他回覆
+        socket.emit('reply', paperid);
     });
 
 
-//秀出文章
+//秀出主文章
     socket.on('showpaper',function(id, content, time) {
 
         var str = content;
             str = str.replace(/\n/g,"<br />");
 
 
-        var inset  ='<div style ="margin:10px; display:none;"><div class="content"><b style="color:#2B8674; line-height:20pt;">作者：匿名　id：'+id+'　時間：'+time+'　</b><a href="/reply?id='+id+'">返信</a><br>'+str+'</div><div id="paper'+id+'" class="reply"></div></div>';
+        var inset  ='<div style ="margin:10px; display:none;"><div class="content"><b style="color:#2B8674; line-height:20pt;">作者：匿名　id：'+id+'　時間：'+time+'</b><br>'+str+'</div><div id="paper'+id+'" class="reply"></div></div>';
     
         $(inset).prependTo('.show').fadeIn('slow');
    
     });
+
 
 //秀出回副的文章
     socket.on('showreply',function(paperid, content, time) {
@@ -46,13 +57,11 @@ socket = io.connect('http://localhost:200');
         var str = content;
             str = str.replace(/\n/g,"<br />");
 
-        var inset  ='<a style ="display:none;"><b style="color:#2B8674">時間：'+time+'</b><br>'+str+'<br><br>';
+        var inset  ='<a style ="display:none;"><b style="color:#2B8674">時間：'+time+'</b><br>'+str+'<br><br><br>';
     
         $(inset).appendTo('#paper' + paperid).fadeIn('slow');
    
     });
-
-
 
 
 
@@ -64,16 +73,16 @@ socket = io.connect('http://localhost:200');
 <div class="release">
     <label for="content">文章內容　</label><button type="button" id="add">發表</button><br>
     <textarea cols="45" rows="5" id="content"></textarea>
+    <br>
+    <a href="/">回主頁</a>
 </div>
 
 <div class="show">
-
-
 
 
 </div>
  
 </body>
 
-<script src="home.js"></script>
+<script src="reply.js"></script>
 </html>

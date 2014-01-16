@@ -15,6 +15,9 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/views/home.html');
 });
 
+app.get('/reply', function (req, res) {
+  res.sendfile(__dirname + '/views/reply.html');
+});
 
 //==============================================================
 server.listen(200);
@@ -31,14 +34,12 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-
-
 //==============================================================
 io.sockets.on('connection', function (socket) {
 
 
   
- 	    //進入網頁後 先從資料庫把舊文章提出來
+ 	    //進入網頁後 先從資料庫把舊文章提出來(首頁)
       socket.on('loadpaper',function() {      
 
             connection.query('SELECT * FROM paper ORDER BY id ASC', function(err, results){
@@ -52,14 +53,14 @@ io.sockets.on('connection', function (socket) {
 
       });
 
-      //進入網頁後 先從資料庫把舊留言提出來
-      socket.on('loadmzg',function() {      
+      //舊文章提出來後 載入相對回覆文章(首頁)
+      socket.on('loadreply',function() {      
 
-            connection.query('SELECT * FROM mzg ORDER BY paperkey ASC', function(err, results){
+            connection.query('SELECT * FROM reply ORDER BY time ASC', function(err, results){
 
                   for (var i=0; i<results.length; i++){
                   var date=dateFormat(results[i].time, "yy-mm-dd(H:MM:ss)");
-                  socket.emit('showmzg', results[i].paperkey, results[i].content, date);
+                  socket.emit('showreply', results[i].paperid, results[i].content, date);
                   }
 
             });   
@@ -67,36 +68,75 @@ io.sockets.on('connection', function (socket) {
       });
 
 
-      //當有人發文時
+
+      //當有人發文時(首頁)
       socket.on('newpaper', function(content) {
 
-var array1 = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
-var key ="";
-            for (var i=1; i<=10; i++) {
-                index = Math.floor(Math.random() * array1.length);
-                key = key +array1[index];
-            }
 
-            connection.query('INSERT INTO paper SET content=?, paperkey=?, time=now()',[content,key],
+            connection.query('INSERT INTO paper SET content=?, time=now()',[content],
 
                   function(error){
                   if(error){   console.log('寫入資料失敗！');   }
             });
 
-            io.sockets.emit('showpaper', "-", content, "-", key);
+            io.sockets.emit('showpaper', "-", content, "-");
       });
 
-      //當有人發留言時
-      socket.on('newmzg', function(key,content) {
-      console.log('asdasdasd！');
-            connection.query('INSERT INTO mzg SET paperkey=?, content=?, time=now()',[key,content],
+
+
+
+      //提領要回覆的文章(返信頁)
+      socket.on('replypaper',function(id) {      
+
+            connection.query('SELECT * FROM paper where id ='+id, function(err, results){
+    
+                  var date=dateFormat(results[0].time, "yy-mm-dd(H:MM:ss)");
+                  socket.emit('showpaper', results[0].id, results[0].content, date);
+                  
+            });   
+
+      });
+
+      //只載入指定文章的回覆文章(返信頁)
+      socket.on('reply',function(id) {      
+
+            connection.query('SELECT * FROM reply where paperid ='+id, function(err, results){
+
+                  for (var i=0; i<results.length; i++){
+                  var date=dateFormat(results[i].time, "yy-mm-dd(H:MM:ss)");
+                  socket.emit('showreply', results[i].paperid, results[i].content, date);
+                  }
+
+            });   
+
+      });
+
+
+      //當有人回覆時(返信頁)
+      socket.on('newreply', function(paperid,content) {
+
+            connection.query('INSERT INTO reply SET paperid=?, content=?, time=now()',[paperid,content],
 
                   function(error){
                   if(error){   console.log('寫入資料失敗！');   }
             });
 
-            io.sockets.emit('showmzg', key, content, "-");
+            io.sockets.emit('showreply', paperid, content, "-");
       });
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
 
 
 });

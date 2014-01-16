@@ -1,11 +1,24 @@
 功能:
 
 .發文要CD
-.很多版
 .聊天室
-.可上傳圖片(先不)
 
-資料庫 "komica"
+
+=================================================
+資料庫"komica"
+
 資料表
--paper{id.content.time.paperkey}
--mzg{paperkey.content.time}
+-paper{id.content.time}
+-reply{paperid.content.time}
+
+=================================================
+node插件
+
+基本三合一
+npm install express socket.io mysql
+
+mysql時間格式編譯器
+npm install dateformat
+
+上傳圖片
+npm install formidable

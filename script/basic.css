@@ -1,0 +1,30 @@
+
+    body {
+    font-family: 微軟正黑體;
+    background-color: #FFFFEE;
+    }
+
+    h1{
+    font-family: 微軟正黑體;
+    }
+
+    .release{
+    padding: 10px;
+    }
+
+    .content{
+  
+    width: 600px; 
+    height: auto; 
+    background-color: #F0E0D6;
+    padding: 5px; 
+    padding-bottom: 60px;
+
+    }
+
+    .reply{
+    width: 600px; 
+    height: auto; 
+    background-color: #D7AC93;
+    padding: 5px; 
+    }
