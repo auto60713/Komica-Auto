@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, 'views')));
 
 
 app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/views/home.html');
+  res.sendfile(__dirname + '/views/page1.html');
 });
 
 app.get('/reply', function (req, res) {
